@@ -18,13 +18,19 @@ int32_t main(int32_t argc, uint8_t* argv[]) {
   uint32_t t0 = ONTIME();
 
   // child process execution
-  spawnvp(P_WAIT, argv[1], (const char**)(argv+1));
+  if (spawnvp(P_WAIT, argv[1], (const char**)(argv+1)) < 0) {
+    printf("error: process execution error.\n");
+    goto exit;
+  }
 
   // end time
   uint32_t t1 = ONTIME();
 
   // output result
   printf("Execution time ... %4.2f [sec]\n", (t1 - t0) / 100.0);
+
+  // success
+  rc = 0;
 
 exit:
   return rc;
